@@ -42,21 +42,12 @@ if (compression) {
 // In development, allow any localhost origin to avoid network errors from port changes
 const corsOrigin = (origin, callback) => {
   const allowedList = [
-    process.env.CLIENT_URL || 'http://localhost:3000',
-    'https://clothing-website-zeta-ecru.vercel.app/',
-    'http://localhost:3001',
-    'http://localhost:3002',
-    'http://localhost:3003',
-    'http://localhost:3004',
-    'http://localhost:3005',
-    'http://localhost:3006',
-    'http://localhost:3007',
-    'http://localhost:3008',
-    'http://localhost:3009'
+    (process.env.CLIENT_URL || 'https://clothing-website-zeta-ecru.vercel.app').replace(/\/$/, ''),
   ];
   if (!origin) return callback(null, true);
-  if (allowedList.includes(origin)) return callback(null, true);
-  if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
+  const normalizedOrigin = origin.replace(/\/$/, '');
+  if (allowedList.includes(normalizedOrigin)) return callback(null, true);
+  if (/^http:\/\/localhost:\d+$/.test(normalizedOrigin)) return callback(null, true);
   return callback(new Error('Not allowed by CORS'));
 };
 
@@ -64,8 +55,12 @@ app.use(cors({
   origin: corsOrigin,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
+  optionsSuccessStatus: 200
 }));
+
+// Explicitly handle preflight for all routes
+app.options('*', cors({ origin: corsOrigin, credentials: true }));
 
 // Security middleware
 app.use(helmet());
