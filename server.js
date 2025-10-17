@@ -43,6 +43,7 @@ if (compression) {
 const corsOrigin = (origin, callback) => {
   const allowedList = [
     process.env.CLIENT_URL || 'http://localhost:3000',
+    'https://clothing-website-zeta-ecru.vercel.app/',
     'http://localhost:3001',
     'http://localhost:3002',
     'http://localhost:3003',
