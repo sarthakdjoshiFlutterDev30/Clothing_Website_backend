@@ -26,6 +26,7 @@ const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/orders');
 const wishlistRoutes = require('./routes/wishlist');
 const userRoutes = require('./routes/users');
+const settingsRoutes = require('./routes/settings');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -59,7 +60,6 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
-// Explicitly handle preflight for all routes
 app.options('*', cors({ origin: corsOrigin, credentials: true }));
 
 // Security middleware
@@ -104,6 +104,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/settings', settingsRoutes);
 // Removed Razorpay payment routes
 
 // Health check route
