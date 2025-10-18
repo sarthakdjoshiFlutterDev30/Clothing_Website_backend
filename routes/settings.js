@@ -6,9 +6,9 @@ const router = express.Router();
 
 // Public routes
 router.get('/maintenance', getMaintenanceMode);
-router.get('/', getSettings);
 
 // Protected routes (Admin only)
+router.get('/', protect, getSettings);
 router.put('/', protect, updateSettings);
 
 module.exports = router;

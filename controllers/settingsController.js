@@ -17,13 +17,19 @@ const getSettings = asyncHandler(async (req, res) => {
 // @route   PUT /api/settings
 // @access  Private (Admin only)
 const updateSettings = asyncHandler(async (req, res) => {
+  console.log('Update settings request body:', req.body);
+  console.log('User making request:', req.user);
+  
   const settings = await Settings.getSettings();
+  console.log('Current settings from DB:', settings);
   
   const updatedSettings = await Settings.findByIdAndUpdate(
     settings._id,
     req.body,
     { new: true, runValidators: true }
   );
+
+  console.log('Updated settings:', updatedSettings);
 
   res.status(200).json({
     success: true,

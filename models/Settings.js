@@ -49,7 +49,11 @@ const settingsSchema = new mongoose.Schema({
 settingsSchema.statics.getSettings = async function() {
   let settings = await this.findOne();
   if (!settings) {
+    console.log('No settings found, creating default settings...');
     settings = await this.create({});
+    console.log('Created default settings:', settings);
+  } else {
+    console.log('Found existing settings:', settings);
   }
   return settings;
 };
