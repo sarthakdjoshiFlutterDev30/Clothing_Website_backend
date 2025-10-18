@@ -14,6 +14,9 @@ try {
 // Load env vars
 require('dotenv').config({ path: './config.env' });
 
+// Import maintenance mode middleware
+const { maintenanceMode } = require('./middleware/maintenanceMode');
+
 // Set JWT_COOKIE_EXPIRE if not set
 if (!process.env.JWT_COOKIE_EXPIRE) {
   process.env.JWT_COOKIE_EXPIRE = '7';
@@ -96,6 +99,13 @@ mongoose.connect(process.env.MONGO_URI, {
 })
 .then(() => console.log('MongoDB connected successfully'))
 .catch(err => console.log('MongoDB connection error:', err));
+
+// Apply maintenance mode middleware to all API routes except settings
+app.use('/api/products', maintenanceMode);
+app.use('/api/cart', maintenanceMode);
+app.use('/api/orders', maintenanceMode);
+app.use('/api/wishlist', maintenanceMode);
+app.use('/api/users', maintenanceMode);
 
 // Mount routes
 app.use('/api/auth', authRoutes);
